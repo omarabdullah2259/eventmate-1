@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventMate Login</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='logo.svg') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='logo.svg') }}">
+    <style>
+        :root {
+            --bg: #0b1220;
+            --surface: rgba(255,255,255,0.06);
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --accent: #60a5fa;
+            --accent-dark: #2563eb;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 2rem;
+            background: linear-gradient(180deg, #020617 0%, #0b1220 50%, #111926 100%);
+            color: var(--text);
+            font-family: Inter, system-ui, sans-serif;
+        }
+        .card {
+            width: min(520px, 100%);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(148,163,184,0.18);
+            border-radius: 32px;
+            padding: 2rem;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+        }
+        .topbar {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        .brand-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.85rem;
+            text-decoration: none;
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 18px;
+            transition: background 0.3s ease;
+        }
+        .brand-link:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        .brand-link img {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            object-fit: contain;
+            background: #fff;
+            padding: 5px;
+        }
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .logo img {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            object-fit: contain;
+            background: #fff;
+            padding: 6px;
+            flex: 0 0 auto;
+        }
+        h1 {
+            margin: 0;
+            font-size: clamp(2rem, 3vw, 2.6rem);
+        }
+        p {
+            margin: 1rem 0 1.75rem;
+            color: var(--muted);
+            line-height: 1.75;
+        }
+        .google-btn {
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            border: none;
+            border-radius: 16px;
+            padding: 0.95rem 1rem;
+            background: white;
+            color: #111827;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.16);
+        }
+        .google-btn:hover { transform: translateY(-1px); }
+        .google-btn.secondary { background: rgba(255,255,255,0.12); color: #e2e8f0; }
+        .google-btn.guest { background: rgba(255,255,255,0.12); color: #e2e8f0; }
+        .google-btn.disabled { background: rgba(255,255,255,0.12); color: rgba(17,24,39,0.5); cursor: not-allowed; }
+        .google-btn svg { width: 20px; height: 20px; }
+        .requires-terms[aria-disabled="true"],
+        .requires-terms:disabled {
+            opacity: 0.55;
+            pointer-events: none;
+        }
+        .hint {
+            margin-top: 1.2rem;
+            color: var(--muted);
+            font-size: 0.95rem;
+            text-align: center;
+        }
+        .error {
+            margin-top: 1rem;
+            color: #fda4af;
+            text-align: center;
+            font-weight: 700;
+        }
+        .terms-card {
+            width: 100%;
+            margin: 0.95rem 0 0.85rem;
+            padding: 0.9rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(148,163,184,0.18);
+            border-radius: 16px;
+        }
+        .terms-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            color: var(--muted);
+            font-size: 0.95rem;
+            line-height: 1.4;
+            cursor: pointer;
+        }
+        .terms-toggle input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+            flex: 0 0 auto;
+        }
+        .terms-details {
+            margin-top: 0;
+            padding: 0.9rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(148,163,184,0.18);
+            border-radius: 16px;
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.55;
+        }
+        .terms-details summary {
+            color: var(--accent);
+            cursor: pointer;
+            font-weight: 700;
+        }
+        .terms-details p {
+            margin: 0.7rem 0 0;
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <a href="/" class="brand-link">
+            <img src="{{ url_for('static', filename='logo.svg') }}" alt="EventMate Logo">
+            <div>
+                <strong style="font-size:1rem; letter-spacing:0.12em; text-transform:uppercase;">EventMate</strong>
+            </div>
+        </a>
+    </div>
+    <article class="card">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.svg') }}" alt="EventMate Logo">
+            <div>
+                <p style="margin:0; color:var(--accent); text-transform:uppercase; letter-spacing:0.16em; font-size:0.75rem;">EventMate</p>
+                <h1>Welcome back</h1>
+            </div>
+        </div>
+        {% if user %}
+            <p>You are already signed in as {{ user.name }}.</p>
+            <a class="google-btn guest" href="/logout">Logout</a>
+        {% else %}
+            <p>Choose how you want to continue to EventMate.</p>
+            <div style="display:grid; gap:0.85rem;">
+                <a class="google-btn{% if not google_enabled %} disabled{% endif %}" {% if google_enabled %}href="/login/google"{% else %}href="#" onclick="return false;"{% endif %}>
+                    <svg viewBox="0 0 533.5 544.3" xmlns="http://www.w3.org/2000/svg"><path fill="#4285F4" d="M533.5 278.4c0-18.6-1.5-37-4.5-54.8H272.1v103.8h146.8c-6.4 34.4-25.1 63.5-53.4 83v68.8h86.4c50.7-46.6 80.6-115.4 80.6-200.8z"/><path fill="#34A853" d="M272.1 544.3c72.4 0 133.1-23.9 177.4-65.1l-86.4-68.8c-24.1 16.2-54.5 25.7-91 25.7-69.8 0-129-47.2-150.2-110.7H33.9v69.6c44.1 87.4 134.5 149.3 238.2 149.3z"/><path fill="#FBBC05" d="M121.9 325.4c-10.7-31.6-10.7-65.7 0-97.3V158.5H33.9c-44.3 87.4-44.3 191.3 0 278.7l87.9-69.6z"/><path fill="#EA4335" d="M272.1 107.1c39.2-.6 76.7 14.6 105.3 41.8l79-79C404.6 24 343.8 0 272.1 0 168.4 0 78 61.9 33.9 149.3l87.9 69.6c21.2-63.5 80.4-110.7 150.3-111.8z"/></svg>
+                    Login with Google
+                </a>
+                <form method="post" action="/login/manual" style="display:grid; gap:0.85rem;">
+                    <label style="color:var(--muted); font-size:0.95rem;">Login with account</label>
+                    <input type="text" name="name" placeholder="Full Name" required style="width:100%; border:1px solid rgba(148,163,184,0.2); border-radius:14px; padding:0.95rem 1rem; background:rgba(255,255,255,0.08); color:var(--text);">
+                    <input type="password" name="password" placeholder="Password" required style="width:100%; border:1px solid rgba(148,163,184,0.2); border-radius:14px; padding:0.95rem 1rem; background:rgba(255,255,255,0.08); color:var(--text);">
+                    <button type="submit" class="google-btn" style="background: rgba(255,255,255,0.12); color: #e2e8f0;">Login</button>
+                </form>
+                <a class="google-btn secondary requires-terms" href="/signup" aria-disabled="true">Create account</a>
+                <form id="guestForm" method="post" action="/login/guest" style="display:grid;">
+                    <button type="submit" class="google-btn guest requires-terms" disabled>Continue as Guest</button>
+                </form>
+            </div>
+            <section class="terms-card">
+                <label class="terms-toggle" for="acceptTerms">
+                    <input type="checkbox" id="acceptTerms" name="accept_terms" value="on" form="guestForm">
+                    <span>I accept the Terms and Conditions</span>
+                </label>
+            </section>
+            <details class="terms-details">
+                <summary>Click here for Terms and Conditions details</summary>
+                <p><strong>Use of the Service:</strong> EventMate helps users discover events and connect with others. Use the platform only for lawful and respectful purposes.</p>
+                <p><strong>User Accounts:</strong> You are responsible for your account information and activity.</p>
+                <p><strong>Event Participation:</strong> EventMate is not responsible for event organization, safety, or outcomes. Users attend events at their own risk.</p>
+                <p><strong>Privacy:</strong> We collect basic information to provide the service and do not sell personal data to third parties.</p>
+                <p><strong>Contact:</strong> For questions, contact <a href="mailto:omar-abdullah@gmx.de" style="color: var(--accent); text-decoration: none;">omar-abdullah@gmx.de</a>.</p>
+            </details>
+            <p class="hint">
+                {% if google_enabled %}
+                    Guest users can browse events, but attendee lists are hidden for privacy.
+                {% else %}
+                    Google login is not configured yet. You can still continue as Guest or set up Google OAuth.
+                {% endif %}
+            </p>
+        {% endif %}
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+    </article>
+
+    <script>
+        const acceptTermsCheckbox = document.getElementById('acceptTerms');
+        const termsActions = document.querySelectorAll('.requires-terms');
+
+        function updateTermsActions() {
+            if (!acceptTermsCheckbox) return;
+            const accepted = acceptTermsCheckbox.checked;
+            termsActions.forEach((action) => {
+                if (action.tagName === 'BUTTON') {
+                    action.disabled = !accepted;
+                } else {
+                    action.setAttribute('aria-disabled', accepted ? 'false' : 'true');
+                }
+            });
+        }
+
+        termsActions.forEach((action) => {
+            action.addEventListener('click', (event) => {
+                if (acceptTermsCheckbox && !acceptTermsCheckbox.checked) {
+                    event.preventDefault();
+                }
+            });
+        });
+
+        if (acceptTermsCheckbox) {
+            acceptTermsCheckbox.addEventListener('change', updateTermsActions);
+        }
+
+        updateTermsActions();
+    </script>
+
+    <footer class="footer">© 2026 EventMate. All rights reserved.</footer>
+</body>
+</html>
